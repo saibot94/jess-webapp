@@ -1,5 +1,6 @@
 package servlets;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -9,8 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jess.Fact;
 import jess.JessException;
 import jess.Rete;
+import jess.Value;
 
 /**
  * Servlet implementation class HelloJess
@@ -24,7 +27,6 @@ public class HelloJess extends HttpServlet {
      */
     public HelloJess() { 
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -35,6 +37,21 @@ public class HelloJess extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		Rete engine = new Rete();
 		engine.addOutputRouter("page", out);
+		
+		try {
+			
+			Color pink = new Color(255,200,200);
+			engine.store("PINK", pink);
+			Value v = engine.executeCommand("(assert (color (fetch PINK)))");
+			
+			Fact f = v.factValue(engine.getGlobalContext());
+			Color pink2 = (Color)engine.fetch("PINK").externalAddressValue(engine.getGlobalContext());
+			print(pink2.toString(), engine);
+			
+		} catch (JessException e) {
+			e.printStackTrace();
+		}
+		
 		try{
 			print("<html>", engine);
 			print("<head>", engine);
