@@ -200,10 +200,6 @@
     =>
     (assert (initialize-order ?number))
     (retract ?clean ?order))
-
-(printout t (get-new-order-number) crlf)
 (reset)
-(watch all)
-(run-query all-products)
-(run)
 
+(run-query all-products)
