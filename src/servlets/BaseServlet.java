@@ -1,5 +1,6 @@
 package servlets;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -9,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jess.Batch;
+import jess.JessException;
+import jess.Rete;
+
 public abstract class BaseServlet extends HttpServlet{
 
 	protected void dispatch(HttpServletRequest request,
@@ -17,4 +22,36 @@ public abstract class BaseServlet extends HttpServlet{
 		RequestDispatcher dispatcher = context.getRequestDispatcher(page);
 		dispatcher.forward(request, response);
 	}
+	
+	protected void checkInitialized() throws ServletException {
+		ServletContext servletContext = getServletContext();
+		String path = servletContext.getRealPath("/");
+
+		String rulesFile = path + servletContext.getInitParameter("rulesfile");
+		String factsFile = path + servletContext.getInitParameter("factsfile");
+		System.out.println("Rules file: " + rulesFile);
+		System.out.println("Facts file: " + factsFile);
+		
+		System.out.println("Working Directory = "
+				+ System.getProperty("user.dir"));
+
+		factsFile = factsFile.replace('\\', '/');
+		if (servletContext.getAttribute("engine") == null) {
+			try {
+				Rete engine = new Rete(this);
+				Batch.batch(rulesFile, engine);
+				engine.reset();
+
+				if (new File(factsFile).exists()) {
+					engine.executeCommand("(load-facts " + factsFile + ")");
+				}
+				servletContext.setAttribute("engine", engine);
+			} catch (JessException e) {
+				e.printStackTrace();
+				throw new ServletException(e);
+			}
+
+		}
+	}
+
 }

@@ -1,3 +1,4 @@
+
 (deftemplate product
 	(slot name)
 	(slot category)
@@ -201,6 +202,15 @@
     =>
     (assert (initialize-order ?number))
     (retract ?clean ?order))
+
+
+(defrule CLEANUP::clean-up-order
+	(declare (auto-focus TRUE))
+	?clean <- (MAIN::clean-up-order ?number)
+	?order <- (order (order-number ?number))
+	=>
+	(assert (initialize-order ?number))
+	(retract ?clean ?order))
 
 (set-current-module MAIN)
 (reset)

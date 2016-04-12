@@ -26,15 +26,37 @@
 		<servlet-name>Catalog</servlet-name>
 		<servlet-class>servlets.Catalog</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>Recommend</servlet-name>
+		<servlet-class>servlets.Recommend</servlet-class>
+	</servlet>
 
 	<servlet>
 		<servlet-name>HelloJess</servlet-name>
 		<servlet-class>servlets.HelloJess</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>Purchase</servlet-name>
+		<servlet-class>servlets.Purchase</servlet-class>
+	</servlet>
+	
+	
 	<servlet-mapping>
 		<servlet-name>Catalog</servlet-name>
 		<url-pattern>/Order/catalog/</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Recommend</servlet-name>
+		<url-pattern>/Order/recommend/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Purchase</servlet-name>
+		<url-pattern>/Order/purchase/</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>HelloJess</servlet-name>
 		<url-pattern>/hello</url-pattern>
