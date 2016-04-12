@@ -25,6 +25,9 @@
 	(slot type)
 	(slot part-number))
 
+(defquery all-products
+    (product))
+
 
 (defrule recommend-requirements
 	(order (customer-id ?id) (order-number ?currentOrder))
@@ -145,8 +148,6 @@
 	(retract ?r))
 
 ;; Queries here
-(defquery all-products
-    (product))
 
 (defquery items-for-order
     (declare (variables ?order))
@@ -200,6 +201,8 @@
     =>
     (assert (initialize-order ?number))
     (retract ?clean ?order))
-(reset)
 
+(set-current-module MAIN)
+(reset)
 (run-query all-products)
+(run)

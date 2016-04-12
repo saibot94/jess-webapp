@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import jess.Batch;
+import jess.Deffacts;
 import jess.JessException;
 import jess.Rete;
 import jess.ValueVector;
@@ -43,7 +44,7 @@ public class Catalog extends BaseServlet {
 		try {
 			String customerId = (String) request.getParameter("customerId");
 			if (customerId == null || customerId.length() == 0) {
-				dispatch(request, response, "/index.html");
+				dispatch(request, response, "/");
 			}
 			else{ 
 				// start the new login
@@ -54,6 +55,7 @@ public class Catalog extends BaseServlet {
 
 				session.setAttribute("orderNumber",
 						String.valueOf(getNewOrderNumber()));
+				System.out.println(session.getAttribute("orderNumber"));
 				runProductQuery(request);
 				dispatch(request, response, "/catalog.jsp");	
 			}
@@ -84,10 +86,13 @@ public class Catalog extends BaseServlet {
 
 		String rulesFile = path + servletContext.getInitParameter("rulesfile");
 		String factsFile = path + servletContext.getInitParameter("factsfile");
-		System.out.println("Facts file: " + rulesFile);
+		System.out.println("Rules file: " + rulesFile);
+		System.out.println("Facts file: " + factsFile);
+		
 		System.out.println("Working Directory = "
 				+ System.getProperty("user.dir"));
 
+		factsFile = factsFile.replace('\\', '/');
 		if (servletContext.getAttribute("engine") == null) {
 			try {
 				Rete engine = new Rete(this);
@@ -99,7 +104,6 @@ public class Catalog extends BaseServlet {
 				}
 				servletContext.setAttribute("engine", engine);
 			} catch (JessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				throw new ServletException(e);
 			}
