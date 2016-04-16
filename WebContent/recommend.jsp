@@ -10,7 +10,7 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-mdi-8 col-md-push-2">
+			<div class="col-md-8 col-md-push-2">
 				<h1 style="font-style: italic;">Your recommendations</h1>
 				<p>You may also wish to buy the following items:</p>
 				<form action="${pageContext.request.contextPath}/Order/purchase" method="post">

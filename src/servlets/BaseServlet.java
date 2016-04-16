@@ -30,7 +30,6 @@ public abstract class BaseServlet extends HttpServlet{
 		String rulesFile = path + servletContext.getInitParameter("rulesfile");
 		String factsFile = path + servletContext.getInitParameter("factsfile");
 		factsFile = factsFile.replace('\\', '/');
-		rulesFile = rulesFile.replace('\\', '/');
 		
 		if (servletContext.getAttribute("engine") == null) {
 			try {

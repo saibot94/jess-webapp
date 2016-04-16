@@ -11,7 +11,7 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-7 col-md-push-3">
+			<div class="col-md-8 col-md-push-2">
 				<h1>Tekmart.com catalog</h1>
 				<p>
 					Customer id:
