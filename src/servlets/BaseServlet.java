@@ -30,6 +30,8 @@ public abstract class BaseServlet extends HttpServlet{
 		String rulesFile = path + servletContext.getInitParameter("rulesfile");
 		String factsFile = path + servletContext.getInitParameter("factsfile");
 		factsFile = factsFile.replace('\\', '/');
+		rulesFile = rulesFile.replace('\\', '/');
+		
 		if (servletContext.getAttribute("engine") == null) {
 			try {
 				Rete engine = new Rete(this);
@@ -39,6 +41,7 @@ public abstract class BaseServlet extends HttpServlet{
 				if (new File(factsFile).exists()) {
 					engine.executeCommand("(load-facts " + factsFile + ")");
 				}
+				engine.setFocus("MAIN");
 				servletContext.setAttribute("engine", engine);
 			} catch (JessException e) {
 				e.printStackTrace();

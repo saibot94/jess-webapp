@@ -183,39 +183,76 @@
     	(return ?number)))
 
 
+
+(deffacts product-catalog
+
+  (product (name "TekMart VC-103 VCR") (category vcr)
+           (part-number TMVC103) (price 125)
+           (requires video-cables tv batteries videotape))
+  (product (name "TekMart DVD-223 DVD Player") (category dvd)
+           (part-number TMDVD223) (price 225)
+           (requires video-cables tv batteries dvd-disk))
+  (product (name "TekMart TV-19 19'' TV") (category tv)
+           (part-number TMTV19) (price 229)
+           (requires batteries))
+  (product (name "TekMart TV-24 24'' TV") (category tv)
+           (part-number TMTV24) (price 299)
+           (requires batteries))
+  (product (name "Eraserhead VHS") (category videotape)
+           (part-number EHVHS) (price 25.99)
+           (requires vcr))
+  (product (name "Casablanca VHS") (category videotape)
+           (part-number CBVHS) (price 12.99)
+           (requires vcr))
+  (product (name "Repo Man VHS") (category videotape)
+           (part-number RMVHS) (price 19.99)
+           (requires vcr))
+  (product (name "Dumbo DVD") (category dvd-disk)
+           (part-number DDVD) (price 19.99)
+           (requires dvd))
+  (product (name "The Matrix DVD") (category dvd-disk)
+           (part-number MDVD) (price 29.99)
+           (requires dvd))
+  (product (name "TekMart CB-32 Video Cables") (category video-cables)
+           (part-number TMCB32) (price 24.99))
+  (product (name "Bose Gold Standard Video Cables") (category video-cables)
+           (part-number BGSVC) (price 54.99))
+  (product (name "4-pack Duracell AA Batteries") (category batteries)
+           (part-number DBAA4PK) (price 3.99))
+  (product (name "10-pack TekMart AA Batteries") (category batteries)
+           (part-number TMAA10PK) (price 1.99)))
+
+
 (defmodule CLEANUP)
 
 (defrule CLEANUP::initialize-order-1
-(declare (auto-focus TRUE))
-	(MAIN::initialize-order ?number)
-	?item <- (line-item (order-number ?number))
-	=>
-	(retract ?item))
+  (declare (auto-focus TRUE))
+  (MAIN::initialize-order ?number)
+  ?item <- (line-item (order-number ?number))
+  =>
+  (retract ?item))
 
 (defrule CLEANUP::initialize-order-2
-	(declare (auto-focus TRUE))
-	(MAIN::initialize-order ?number)
-    ?rec <- (recommend (order-number ?number))
-    =>
-    (retract ?rec))
+  (declare (auto-focus TRUE))
+  (MAIN::initialize-order ?number)
+  ?rec <- (recommend (order-number ?number))
+  =>
+  (retract ?rec))
 
 (defrule CLEANUP::initialize-order-3
-	(declare (auto-focus TRUE))
-	?init <- (MAIN::initialize-order ?number)
-	(not (line-item (order-number ?number)))
-	(not (recommend (order-number ?number)))
-	=>
-	(retract ?init))
-
+  (declare (auto-focus TRUE))
+  ?init <- (MAIN::initialize-order ?number)
+  (not (line-item (order-number ?number)))
+  (not (recommend (order-number ?number)))
+  =>
+  (retract ?init))
 
 (defrule CLEANUP::clean-up-order
-	(declare (auto-focus TRUE))
-	?clean <- (MAIN::clean-up-order ?number)
-	?order <- (order (order-number ?number))
-	=>
-	(assert (MAIN::initialize-order ?number))
-	(retract ?clean ?order))
+  (declare (auto-focus TRUE))
+  ?clean <- (MAIN::clean-up-order ?number)
+  ?order <- (order (order-number ?number))
+  =>
+  (assert (initialize-order ?number))
+  (retract ?clean ?order))
 
 (set-current-module MAIN)
-(reset)
-(run)

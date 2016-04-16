@@ -58,15 +58,10 @@ public class Recommend extends BaseServlet {
 			order.setSlotValue("customer-id", customerIdValue);
 			engine.assertFact(order);
 
-			/*
-			Fact cleanUpFact = new Fact("clean-up-order", engine);
-			cleanUpFact.setSlotValue("__data",
-					new Value(new ValueVector().add(orderNumberString),
-							RU.LIST));
-			engine.assertFact(cleanUpFact);
-			*/
+			addCleanUpFact(orderNumberString, engine);
+		
+			
 			engine.run();
-			engine.executeCommand("(facts)");
 
 
 		
@@ -77,11 +72,11 @@ public class Recommend extends BaseServlet {
 				item.setSlotValue("customer-id", customerIdValue);
 				engine.assertFact(item);
 			}
-			engine.executeCommand("(facts)");
 
 			engine.run();
+			
+			engine.executeCommand("(ppdefrule recommend-same-type-of-media)");
 			System.out.println("After the run: \n");
-			engine.executeCommand("(facts)");
 			Iterator result = engine.runQuery("recommendations-for-order",
 					new ValueVector().add(orderNumberValue));
 			if (result.hasNext()) {
@@ -94,6 +89,15 @@ public class Recommend extends BaseServlet {
 			throw new ServletException(je);
 		}
 
+	}
+
+	private void addCleanUpFact(String orderNumberString, Rete engine) throws JessException {
+		
+		Fact cleanUpFact = new Fact("clean-up-order", engine);
+		cleanUpFact.setSlotValue("__data",
+				new Value(new ValueVector().add(orderNumberString),
+						RU.LIST));
+		engine.assertFact(cleanUpFact);		
 	}
 
 	@Override
