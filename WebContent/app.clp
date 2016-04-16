@@ -220,7 +220,14 @@
   (product (name "4-pack Duracell AA Batteries") (category batteries)
            (part-number DBAA4PK) (price 3.99))
   (product (name "10-pack TekMart AA Batteries") (category batteries)
-           (part-number TMAA10PK) (price 1.99)))
+           (part-number TMAA10PK) (price 1.99))
+	(product (name "Blu-ray & DVD Player") (category dvd) (part-number TESTDVD2) (price 120))
+	(product (name "Home VCR") (category vcr) (part-number TESTVCR1) (price 125) (requires videotape))
+	(product (name "Gilette") (category hygene) (part-number HYG1) (price 50))
+	(product (name "The Revenant DVD") (category dvd-disk) (part-number TESTDVD3) (price 120))
+	(product (name "Eternal Sunshine of the Spotless Mind") (category dvd) (part-number TESTDVD5) (price 30))
+
+  )
 
 
 (defmodule CLEANUP)

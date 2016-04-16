@@ -15,7 +15,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-8 col-md-push-2">
-				<h2>Your final order:</h2>
+				<div class="well-sm well">
+					<h3 style="font-style: italic; color: firebrick;">Your final
+						order:</h3>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -46,6 +49,13 @@
 						}
 					%>
 				</table>
+				<div style="font-style: italic; color: firebrick;"
+					class="well well-sm">
+					The grand total:
+					<%=total%></div>
+				<form action="${pageContext.request.contextPath}/" method="get">
+					<button type="submit" class="btn btn-primary">Finish order</button>
+				</form>
 			</div>
 		</div>
 	</div>
