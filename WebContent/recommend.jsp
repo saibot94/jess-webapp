@@ -4,7 +4,7 @@
 <html>
 <jsp:useBean id="queryResult" type="java.util.Iterator" scope="request" />
 <head>
-<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css">
 <title>Our recommendations</title>
 </head>
 <body>
@@ -62,7 +62,7 @@
 		</div>
 	</div>
 
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 </body>
 </html>

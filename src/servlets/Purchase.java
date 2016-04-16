@@ -43,7 +43,9 @@ public class Purchase extends BaseServlet {
 			Value customerIdValue = new Value(customerIdString, RU.ATOM);
 			String[] items = (String[]) req.getParameterValues("items");
 			if (items != null) {
+				System.out.println("These are the order items: ");
 				for (String orderItem : items) {
+					System.err.println(orderItem);
 					Fact item = new Fact("line-item", engine);
 					item.setSlotValue("order-number", orderNumberValue);
 					item.setSlotValue("customer-id", customerIdValue);
@@ -52,6 +54,7 @@ public class Purchase extends BaseServlet {
 					engine.assertFact(item);
 				}
 			}
+			engine.run();
 			Iterator result = engine.runQuery("items-for-order",
 					new ValueVector().add(orderNumberValue));
 			req.setAttribute("queryResult", result);

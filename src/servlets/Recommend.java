@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import jess.Fact;
 import jess.JessException;
 import jess.RU;
@@ -45,35 +44,51 @@ public class Recommend extends BaseServlet {
 
 		try {
 			Rete engine = (Rete) context.getAttribute("engine");
-			System.out.println("This is my order number string: " + orderNumberString);
-			engine.executeCommand("(assert (clean-up-order " + orderNumberString
-					+ "))");
-			engine.run();
-
+			System.out.println("This is my order number string: "
+					+ orderNumberString);
+			engine.executeCommand("(watch all)");
 			int orderNumber = Integer.parseInt(orderNumberString);
+
 			
 			Value customerIdValue = new Value(customerIdString, RU.ATOM);
 			Value orderNumberValue = new Value(orderNumber, RU.INTEGER);
 			Fact order = new Fact("order", engine);
-			
+
 			order.setSlotValue("order-number", orderNumberValue);
 			order.setSlotValue("customer-id", customerIdValue);
 			engine.assertFact(order);
-			
-			for(String orderItem : items){
+
+			/*
+			Fact cleanUpFact = new Fact("clean-up-order", engine);
+			cleanUpFact.setSlotValue("__data",
+					new Value(new ValueVector().add(orderNumberString),
+							RU.LIST));
+			engine.assertFact(cleanUpFact);
+			*/
+			engine.run();
+			engine.executeCommand("(facts)");
+
+
+		
+			for (String orderItem : items) {
 				Fact item = new Fact("line-item", engine);
 				item.setSlotValue("order-number", orderNumberValue);
 				item.setSlotValue("part-number", new Value(orderItem, RU.ATOM));
 				item.setSlotValue("customer-id", customerIdValue);
 				engine.assertFact(item);
 			}
+			engine.executeCommand("(facts)");
+
 			engine.run();
-			Iterator result = engine.runQuery("recommendations-for-order", new ValueVector().add(orderNumberValue));
-			if(result.hasNext()){
+			System.out.println("After the run: \n");
+			engine.executeCommand("(facts)");
+			Iterator result = engine.runQuery("recommendations-for-order",
+					new ValueVector().add(orderNumberValue));
+			if (result.hasNext()) {
 				req.setAttribute("queryResult", result);
 				dispatch(req, resp, "/recommend.jsp");
 			} else {
-				dispatch(req, resp, "/purchase.jsp");
+				dispatch(req, resp, "/Order/purchase/");
 			}
 		} catch (JessException je) {
 			throw new ServletException(je);

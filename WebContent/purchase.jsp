@@ -1,16 +1,23 @@
 <%@page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@ page import="jess.*"%>
+	pageEncoding="ISO-8859-1" import="jess.*"%>
+
 <!DOCTYPE html >
 <html>
-<jsp:useBean id="queryResult" type="java.util.Iterator" scope="request"/>
+<jsp:useBean id="queryResult" type="java.util.Iterator" scope="request" />
 <head>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/bootstrap.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Thanks for shopping!</title>
 </head>
 <body>
 	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-8 col-md-push-2">
+				<h2>Your final order:</h2>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-8 col-md-push-2">
 				<table class="table table-striped">
@@ -42,5 +49,9 @@
 			</div>
 		</div>
 	</div>
+
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+
 </body>
 </html>

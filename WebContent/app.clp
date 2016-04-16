@@ -80,6 +80,8 @@
             (type =(sym-cat discretionary- ?c))))
     =>
     (assert (recommend (order-number ?order)
+    			(because ?name)
+    			(part-number ?part2)
             	(type =(sym-cat discretionary- ?c)))))
 
 (defrule recommend-same-type-of-media
@@ -168,15 +170,17 @@
 
 (deffunction get-new-order-number ()
     (bind ?it (run-query order-number))
-    (if (not (?it hasNext))) then
+    (if (not (?it hasNext)) then
     	(assert (next-order-number (value 1002)))
     	(return 1001)
     else
     	(bind ?token (?it next))
     	(bind ?fact (?token fact 1))
-    	(bind ?number (?fact getSlotValue value))
-    	(modify ?fact (value (+ ?number 1)))
-    	(return ?number))
+    	(bind ?number (fact-slot-value ?fact value))
+    	(retract ?fact)
+
+    	(assert (next-order-number (value (+ ?number 1)) ))
+    	(return ?number)))
 
 
 (defmodule CLEANUP)
@@ -196,12 +200,12 @@
     (retract ?rec))
 
 (defrule CLEANUP::initialize-order-3
-    (declare (auto-focus TRUE))
-    ?clean <- (MAIN::clean-up-order ?number)
-    ?order <- (order (order-number ?number))
-    =>
-    (assert (initialize-order ?number))
-    (retract ?clean ?order))
+	(declare (auto-focus TRUE))
+	?init <- (MAIN::initialize-order ?number)
+	(not (line-item (order-number ?number)))
+	(not (recommend (order-number ?number)))
+	=>
+	(retract ?init))
 
 
 (defrule CLEANUP::clean-up-order
@@ -209,10 +213,9 @@
 	?clean <- (MAIN::clean-up-order ?number)
 	?order <- (order (order-number ?number))
 	=>
-	(assert (initialize-order ?number))
+	(assert (MAIN::initialize-order ?number))
 	(retract ?clean ?order))
 
 (set-current-module MAIN)
 (reset)
-(run-query all-products)
 (run)

@@ -17,7 +17,8 @@
 					Customer id:
 					<%=request.getParameter("customerId")%></p>
 				<p>Select the items that you wish to buy from the following list</p>
-				<form action="${pageContext.request.contextPath}/Order/recommend" method="post">
+				<form action="${pageContext.request.contextPath}/Order/recommend"
+					method="post">
 					<table class="table table-striped">
 						<tr>
 							<th>Name</th>

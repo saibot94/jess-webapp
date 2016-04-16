@@ -29,12 +29,6 @@ public abstract class BaseServlet extends HttpServlet{
 
 		String rulesFile = path + servletContext.getInitParameter("rulesfile");
 		String factsFile = path + servletContext.getInitParameter("factsfile");
-		System.out.println("Rules file: " + rulesFile);
-		System.out.println("Facts file: " + factsFile);
-		
-		System.out.println("Working Directory = "
-				+ System.getProperty("user.dir"));
-
 		factsFile = factsFile.replace('\\', '/');
 		if (servletContext.getAttribute("engine") == null) {
 			try {

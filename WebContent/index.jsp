@@ -4,7 +4,7 @@
 <html>
     <jsp:useBean id="engine" class="jess.Rete" scope="request"/>
 <head>
-<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css">
 <title>Welcome to tekmarkt</title>
 </head>
 <body>
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 	
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>	
+<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>	
 </body>
 </html>
