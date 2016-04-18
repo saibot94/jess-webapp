@@ -30,6 +30,9 @@
     (product))
 
 
+
+
+
 (defrule recommend-requirements
 	(order (customer-id ?id) (order-number ?currentOrder))
 	(not (order (customer-id ?id)
@@ -67,6 +70,36 @@
             		(because ?name)
             		(part-number ?media)
             		(type =(sym-cat discretionary- ?c)))))
+
+
+(defrule reduce-third-items-price
+    "If a customer bought two products of a type in the past, recommend him a third one at 50%"
+    ?p0 <- (product (part-number ?part1) (category ?c))
+    ?p2 <- (product (part-number ?part2) (category ?c))
+    ?p1 <- (product (part-number ?part3) (category ?c) (price ?price))
+    (test (neq ?p0 ?p2))
+    
+    ; he bought two items of that in the past
+    (line-item (customer-id ?id) (part-number ?part1) (order-number ?order1))
+    (line-item (customer-id ?id) (part-number ?part2) (order-number ?order2))
+    (order (customer-id ?id)
+		(order-number ?currentOrder&:(and (> ?currentOrder ?order1)
+										  (> ?currentOrder ?order2))))
+
+    ;; allow only one discount per category
+    (not (recommend (type =(sym-cat discount- ?c))))
+    =>
+    (assert (product (name =(str-cat "Discount " (fact-slot-value ?p1 name)))
+    				 (category =(sym-cat discount- ?c))
+            
+    				 (price =(/ ?price 2))
+    				 (part-number =(sym-cat discount- ?part3))
+    				 (requires =(fact-slot-value ?p1 requires))))
+    (assert (recommend (order-number ?currentOrder)
+    					(because (fact-slot-value ?p0 name) (fact-slot-value ?p2 name))
+    					(part-number =(sym-cat discount- ?part3))
+    					(type =(sym-cat discount- ?c)))
+    ))
 
 (defrule recommend-more-media
     "If a customer buys a disk or tape, recommend a random item of the same category"
@@ -223,10 +256,11 @@
            (part-number TMAA10PK) (price 1.99))
 	(product (name "Blu-ray & DVD Player") (category dvd) (part-number TESTDVD2) (price 120))
 	(product (name "Home VCR") (category vcr) (part-number TESTVCR1) (price 125) (requires videotape))
-	(product (name "Gilette") (category hygene) (part-number HYG1) (price 50))
+	(product (name "Gilette Shaving Cream") (category hygene) (part-number HYG1) (price 50))
 	(product (name "The Revenant DVD") (category dvd-disk) (part-number TESTDVD3) (price 120))
 	(product (name "Eternal Sunshine of the Spotless Mind") (category dvd) (part-number TESTDVD5) (price 30))
-
+	(product (name "Nivea Cream Shower Gel") (category hygene) (part-number NIVEA1) (price 15))
+	(product (name "Herbal Skincare cream") (category hygene) (part-number CREAM1) (price 25))
   )
 
 
