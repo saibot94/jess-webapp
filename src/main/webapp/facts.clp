@@ -1,0 +1,5 @@
+(product (name "Blu-ray & DVD Player") (category dvd-disk) (part-number 1) (price 120))
+(product (name "Home VCR") (category dvd-disk) (part-number 12) (price 125))
+(product (name "Gilette") (category hygene) (part-number 2) (price 50))
+(product (name "The Matrix") (category dvd) (part-number 3) (price 120))
+(product (name "Eternal Sunshine of the Spotless Mind") (category dvd) (part-number 6) (price 30))
